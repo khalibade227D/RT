@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "478424307243",
+    "firebase_url": "https://rtbs-e2301-default-rtdb.firebaseio.com",
+    "project_id": "rtbs-e2301",
+    "storage_bucket": "rtbs-e2301.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478424307243:android:64fee98cc18b6303723c6e",
+        "android_client_info": {
+          "package_name": "com.example.rt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbMECU4NFLqbeFisFgWmA7uZ4j8ip9Df4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
