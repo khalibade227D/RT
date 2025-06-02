@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-
+import android.util.Log;
 public class MainActivity1 extends BaseActivity2 {
     private ActivityMain1Binding binding;
     private int adultPassenger = 1, childPassenger = 1;
@@ -34,6 +34,22 @@ public class MainActivity1 extends BaseActivity2 {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
+        // Verify Firebase initialization
+        try {
+            if (FirebaseApp.getApps(this).isEmpty()) {
+                Log.e("Firebase", "Not initialized! Check Application class");
+                finish(); // Close app if Firebase isn't working
+                return;
+            }
+
+            database = FirebaseDatabase.getInstance();
+            // Rest of your onCreate code...
+        } catch (Exception e) {
+            Log.e("Firebase", "Initialization error", e);
+            // Show error to user and exit
+            finish();
+        }
 
         binding = ActivityMain1Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

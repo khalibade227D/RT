@@ -6,6 +6,10 @@ public class Location {
     public  Location(){
 
     }
+    @Override
+    public String toString(){
+        return Name;
+    }
     public int getId(){
         return Id;
 

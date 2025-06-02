@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
-
+    alias(libs.plugins.android.application)  // This should already include com.android.application
+//    alias(libs.plugins.kotlin.android)       // Use version catalog reference for Kotlin plugin
+    id("com.google.gms.google-services")     // Firebase plugin
 }
 
 android {
@@ -30,22 +31,24 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    buildFeatures{
-    viewBinding = true
+    buildFeatures {
+        viewBinding = true
     }
 }
 
 dependencies {
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    implementation(libs.activity)
+    implementation(libs.constraintlayout)
 
-        implementation(libs.appcompat)
-        implementation(libs.material)
-        implementation(libs.activity)
-        implementation(libs.constraintlayout)
-        implementation(libs.firebase.database)
+    // Firebase - use BOM for version management
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.analytics)
 
-        testImplementation(libs.junit)
-        androidTestImplementation(libs.ext.junit)
-        androidTestImplementation(libs.espresso.core)
-        implementation(libs.glide)
-        implementation (libs.firebase.database.v2030)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    implementation(libs.glide)
 }
