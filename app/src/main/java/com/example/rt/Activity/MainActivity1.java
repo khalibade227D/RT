@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import android.util.Log;
+import android.widget.Toast;
+
 public class MainActivity1 extends BaseActivity2 {
     private ActivityMain1Binding binding;
     private int adultPassenger = 1, childPassenger = 1;
@@ -33,8 +35,7 @@ public class MainActivity1 extends BaseActivity2 {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-
+      //  EdgeToEdge.enable(this);
         // Verify Firebase initialization
         try {
             if (FirebaseApp.getApps(this).isEmpty()) {
@@ -53,6 +54,8 @@ public class MainActivity1 extends BaseActivity2 {
 
         binding = ActivityMain1Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        // In your Application class (or main Activity's onCreate)
+
 
             initLocations();
             initPassengers();
@@ -63,11 +66,11 @@ public class MainActivity1 extends BaseActivity2 {
 
     private void setVariable() {
         binding.searchBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity1.this,SearchActivity.class);
-            intent.putExtra("from",((Location)binding.fromSp.getSelectedItem()).getName());
-            intent.putExtra("to",((Location)binding.toSp.getSelectedItem()).getName());
-            intent.putExtra("date",binding.departureDateTxt.getText().toString());
-            intent.putExtra("numPassenger",adultPassenger+childPassenger);
+            Intent intent = new Intent(MainActivity1.this, SearchActivity.class);
+            intent.putExtra("from", ((Location) binding.fromSp.getSelectedItem()).getName());
+            intent.putExtra("to", ((Location) binding.toSp.getSelectedItem()).getName());
+            intent.putExtra("date", binding.departureDateTxt.getText().toString());
+            intent.putExtra("numPassenger", adultPassenger + childPassenger);
             startActivity(intent);
         });
     }
@@ -77,10 +80,10 @@ public class MainActivity1 extends BaseActivity2 {
         String currentDate = dateFormat.format(calendarToday.getTime());
         binding.departureDateTxt.setText(currentDate);
 
-        Calendar calendarTommorow = Calendar.getInstance();
-        calendarTommorow.add(Calendar.DAY_OF_YEAR, 1);
-        String tommorowDate = dateFormat.format(calendarTommorow.getTime());
-        binding.returnDateTxt.setText(tommorowDate);
+        Calendar calendarTomorrow = Calendar.getInstance();
+        calendarTomorrow.add(Calendar.DAY_OF_YEAR, 1);
+        String tomorrowDate = dateFormat.format(calendarTomorrow.getTime());
+        binding.returnDateTxt.setText(tomorrowDate);
 
         binding.departureDateTxt.setOnClickListener(v -> showDatePickerDialog(binding.departureDateTxt));
         binding.returnDateTxt.setOnClickListener(v -> showDatePickerDialog(binding.returnDateTxt));
