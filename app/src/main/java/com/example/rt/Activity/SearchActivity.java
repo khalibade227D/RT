@@ -32,7 +32,6 @@ public class SearchActivity extends BaseActivity2 {
     private ActivitySearchBinding binding;
     private String from, to, date;
     private int numPassenger;
-
     private FlightAdapter adapter;
     private ArrayList<Flight> flightList = new ArrayList<>();
 
@@ -72,8 +71,8 @@ public class SearchActivity extends BaseActivity2 {
 
         try {
             DatabaseReference myRef = database.getReference("Flights");
-            Query query = myRef.orderByChild("from").equalTo(from);
-
+            //Query query = myRef.orderByChild("from").equalTo(from);
+            Query query = myRef.orderByChild("from_to").equalTo(from + "_" + to);
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -94,7 +93,9 @@ public class SearchActivity extends BaseActivity2 {
                             }
                         }
 
+//                        adapter.updateFlights(flightList);
                         adapter.updateFlights(flightList);
+                        adapter.notifyDataSetChanged(); // Ensure this is called
 
                         if (flightList.isEmpty()) {
                             showEmptyState(true);

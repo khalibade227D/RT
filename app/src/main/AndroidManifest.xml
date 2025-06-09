@@ -5,7 +5,6 @@
 
     <application
         android:name=".MyApp"
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RT"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Activity.TicketDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.SeatListActivity"
             android:exported="false" />
@@ -32,15 +35,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".Activity.MainActivity1"
             android:exported="true"
-            android:theme="@style/Theme.RT">
-
-
-        </activity>
+            android:theme="@style/Theme.RT"></activity>
     </application>
 
 </manifest>

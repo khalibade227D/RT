@@ -1,6 +1,9 @@
 package com.example.rt.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +40,23 @@ public class SeatListActivity extends BaseActivity2{
         
         getIntentExtra();
         initSeatList();
+        setVariable();
+                
+    }
+
+    private void setVariable() {
+        binding.backBtn.setOnClickListener(v -> finish());
+        binding.confirmBtn.setOnClickListener(v -> {
+            if(num>0){
+                flight.setPassenger(binding.nameSeatSelectedTxt.getText().toString());
+                flight.setPrice(String.valueOf(price));
+                Intent intent = new Intent(SeatListActivity.this,TicketDetailActivity.class);
+                intent.putExtra("fight",flight);
+                startActivity(intent);
+            }else{
+                Toast.makeText(SeatListActivity.this,"Please select your seat",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initSeatList() {
@@ -75,7 +95,7 @@ public class SeatListActivity extends BaseActivity2{
         }
         SeatAdapter seatAdapter = new SeatAdapter(seatList, this, (selectedName, num) -> {
             binding.numberSelectedTxt.setText(num+"Seat Selected");
-            binding.nameSeatSelectedTxt.setText(selectedName);
+            binding.numberSelectedTxt.setText(selectedName);
             DecimalFormat df = new DecimalFormat("#.##");
             price = Double.valueOf(df.format(num * Double.parseDouble(flight.getPrice())));
             this.num = num;
