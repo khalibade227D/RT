@@ -10,8 +10,8 @@ public class Flight implements Serializable {
     private String date;
     private String from;
     private String fromShort;
-    private String numberSeat;
-    private String price;
+    private Integer numberSeat;
+    private Double price;
     private String passenger;
     private String seats;
     private String reservedSeats;
@@ -19,9 +19,34 @@ public class Flight implements Serializable {
     private String to;
     private String toShort;
 
-    public Flight(String trainLogo) {
-
+    public Flight() {
+        // Default constructor required for calls to DataSnapshot.getValue(Flight.class)
     }
+
+//    // You had a constructor public Flight(String trainLogo) {}.
+//    // If you intend to use a full constructor, it should include all fields.
+//    // For Firebase, typically only the no-arg constructor and getters/setters are strictly needed.
+//    // However, if you're creating Flight objects in your app, a full constructor is useful.
+    public Flight(String  trainLogo, String trainName, String arriveTime, String classSeat, String date,
+                  String from, String fromShort, Integer numberSeat, Double price, String passenger,
+                  String seats, String reservedSeats, String time, String to, String toShort) {
+        this.trainLogo = trainLogo;
+        this.trainName = trainName;
+        this.arriveTime = arriveTime;
+        this.classSeat = classSeat;
+        this.date = date;
+        this.from = from;
+        this.fromShort = fromShort;
+        this.numberSeat = numberSeat;
+        this.price = price;
+        this.passenger = passenger;
+        this.seats = seats;
+        this.reservedSeats = reservedSeats;
+        this.time = time;
+        this.to = to;
+        this.toShort = toShort;
+    }
+
 
     @Override
     public String toString() {
@@ -84,19 +109,21 @@ public class Flight implements Serializable {
         this.fromShort = fromShort;
     }
 
-    public String getNumberSeat() {
-        return numberSeat;
+    // Corrected getter and setter for numberSeat
+    public Integer getNumberSeat() {
+        return numberSeat != null ? numberSeat : 0;
     }
 
-    public void setNumberSeat(String numberSeat) {
+    public void setNumberSeat(  int numberSeat) {
         this.numberSeat = numberSeat;
     }
 
-    public String getPrice() {
+    // Corrected getter and setter for price
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -108,6 +135,7 @@ public class Flight implements Serializable {
         this.passenger = passenger;
     }
 
+    // Corrected getter and setter for seats
     public String getSeats() {
         return seats;
     }
@@ -116,6 +144,7 @@ public class Flight implements Serializable {
         this.seats = seats;
     }
 
+    // Corrected getter and setter for reservedSeats
     public String getReservedSeats() {
         return reservedSeats;
     }

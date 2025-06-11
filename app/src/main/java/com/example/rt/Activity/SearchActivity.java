@@ -27,25 +27,69 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchActivity extends BaseActivity2 {
     private ActivitySearchBinding binding;
     private String from, to, date;
-    private int numPassenger;
     private FlightAdapter adapter;
-    private ArrayList<Flight> flightList = new ArrayList<>();
+    private FirebaseDatabase database;
+    private DatabaseReference flightsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding=ActivitySearchBinding.inflate(getLayoutInflater());
+        binding = ActivitySearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Initialize Firebase
         database = FirebaseDatabase.getInstance();
+        flightsRef = database.getReference("Flights"); // Note: "Flights" (uppercase)
+
+        // Initialize RecyclerView
+        adapter = new FlightAdapter(new ArrayList<>());
+        binding.SearchView.setLayoutManager(new LinearLayoutManager(this));
+        binding.SearchView.setAdapter(adapter);
 
         getIntentExtra();
-        initList();
         setVariable();
+        searchFlights();
+    }
 
+    private void searchFlights() {
+
+        binding.progressBarSearch.setVisibility(View.VISIBLE);
+
+        // Query flights where "from" matches (case-sensitive)
+        Query query = flightsRef.orderByChild("from").equalTo(from.toLowerCase());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Flight> filteredFlights = new ArrayList<>();
+
+                for (DataSnapshot flightSnapshot : snapshot.getChildren()) {
+                    Flight flight = flightSnapshot.getValue(Flight.class);
+                    if (flight != null && flight.getTo().equalsIgnoreCase(to)) {
+                        filteredFlights.add(flight);
+                    }
+                }
+
+                if (filteredFlights.isEmpty()) {
+                    Toast.makeText(SearchActivity.this, "No flights found", Toast.LENGTH_SHORT).show();
+                } else {
+                    adapter.updateList(filteredFlights); // Update adapter
+                }
+
+                binding.progressBarSearch.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                binding.progressBarSearch.setVisibility(View.GONE);
+                Toast.makeText(SearchActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setVariable() {
@@ -54,104 +98,11 @@ public class SearchActivity extends BaseActivity2 {
         });
     }
 
-    private void initList() {
-        binding.progressBarSearch.setVisibility(View.VISIBLE);
-
-        try {
-            // Initialize adapter and RecyclerView
-            adapter = new FlightAdapter(flightList, this);
-            binding.SearchView.setLayoutManager(new LinearLayoutManager(this));
-            binding.SearchView.setAdapter(adapter);
-        } catch (Exception e) {
-            Log.e("SearchActivity", "RecyclerView setup failed", e);
-            binding.progressBarSearch.setVisibility(View.GONE);
-            showError("Failed to initialize flight list");
-            return;
-        }
-
-        try {
-            DatabaseReference myRef = database.getReference("Flights");
-            //Query query = myRef.orderByChild("from").equalTo(from);
-            Query query = myRef.orderByChild("from_to").equalTo(from + "_" + to);
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    try {
-                        flightList.clear();
-
-                        if (snapshot.exists()) {
-                            for (DataSnapshot issue : snapshot.getChildren()) {
-                                try {
-                                    Flight flight = issue.getValue(Flight.class);
-                                    if (flight != null && flight.getTo().equals(to)) {
-                                        flightList.add(flight);
-                                    }
-                                } catch (Exception e) {
-                                    Log.e("SearchActivity", "Error parsing flight data", e);
-                                    // Continue with next item
-                                }
-                            }
-                        }
-
-//                        adapter.updateFlights(flightList);
-                        adapter.updateFlights(flightList);
-                        adapter.notifyDataSetChanged(); // Ensure this is called
-
-                        if (flightList.isEmpty()) {
-                            showEmptyState(true);
-                            Log.d("SearchActivity", "No flights found matching criteria");
-                        } else {
-                            showEmptyState(false);
-                            Log.d("SearchActivity", "Found " + flightList.size() + " flights");
-                        }
-
-                    } catch (Exception e) {
-                        Log.e("SearchActivity", "Error processing flight data", e);
-                        showError("Error loading flight data");
-                    } finally {
-                        binding.progressBarSearch.setVisibility(View.GONE);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    try {
-                        Log.e("SearchActivity", "Database error: " + error.getMessage());
-                        showError("Failed to load flights: " + error.getMessage());
-                    } finally {
-                        binding.progressBarSearch.setVisibility(View.GONE);
-                    }
-                }
-            });
-
-        } catch (Exception e) {
-            Log.e("SearchActivity", "Database query failed", e);
-            binding.progressBarSearch.setVisibility(View.GONE);
-            showError("Failed to query flights");
-        }
-    }
-
-    // Helper methods for UI states
-    private void showEmptyState(boolean show) {
-        if (binding.noResultsText != null) {
-            binding.noResultsText.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
-        binding.SearchView.setVisibility(show ? View.GONE : View.VISIBLE);
-    }
-
-    private void showError(String message) {
-        // Implement your error display logic here
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        showEmptyState(true);
-        if (binding.noResultsText != null) {
-            binding.noResultsText.setText(message);
-        }
-    }
-
     private void getIntentExtra() {
-        from=getIntent().getStringExtra("from");
-        to=getIntent().getStringExtra("to");
-        date=getIntent().getStringExtra("date");
-        //numPassenger = getIntent().getIntExtra("numPassenger", 1);
+        from = getIntent().getStringExtra("from").toLowerCase(); // Force lowercase
+        to = getIntent().getStringExtra("to").toLowerCase();
+        date = getIntent().getStringExtra("date");
+
+        Log.d("SearchActivity", "Searching flights from: " + from + " to: " + to);
     }
 }

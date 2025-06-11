@@ -38,8 +38,10 @@
         </activity>
         <activity
             android:name=".Activity.MainActivity1"
-            android:exported="true"
-            android:theme="@style/Theme.RT"></activity>
+            android:exported="false"
+            android:theme="@style/Theme.RT">
+
+        </activity>
     </application>
 
 </manifest>

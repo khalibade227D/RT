@@ -2,6 +2,7 @@ package com.example.rt.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.example.rt.Adapter.FlightAdapter;
 import com.example.rt.Adapter.SeatAdapter;
 import com.example.rt.Model.Flight;
 import com.example.rt.Model.Seat;
@@ -49,7 +51,7 @@ public class SeatListActivity extends BaseActivity2{
         binding.confirmBtn.setOnClickListener(v -> {
             if(num>0){
                 flight.setPassenger(binding.nameSeatSelectedTxt.getText().toString());
-                flight.setPrice(String.valueOf(price));
+                flight.setPrice(price);
                 Intent intent = new Intent(SeatListActivity.this,TicketDetailActivity.class);
                 intent.putExtra("fight",flight);
                 startActivity(intent);
@@ -60,6 +62,17 @@ public class SeatListActivity extends BaseActivity2{
     }
 
     private void initSeatList() {
+        if (flight == null || flight.getNumberSeat() == null || flight.getNumberSeat() == 0) {
+            Log.e("SeatListDebug", "Invalid flight data!");
+            Toast.makeText(this, "No seats available", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Properly initialize reservedSeats if null
+        if (flight.getReservedSeats() == null) {
+            flight.setReservedSeats("");
+        }
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 7);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -68,10 +81,13 @@ public class SeatListActivity extends BaseActivity2{
             }
         });
         binding.seatRecyclerView.setLayoutManager(gridLayoutManager);
+
         List<Seat> seatList = new ArrayList<>();
         int row = 0;
-        int numSeats = Integer.parseInt(flight.getNumberSeat());
-        int numberSeat = numSeats + (numSeats / 7) + 1;
+
+        // Calculate total seats needed (including empty spaces)
+        int numberSeat = flight.getNumberSeat() + (flight.getNumberSeat() / 7) + 1;
+
         Map<Integer, String> seatAlphabetMap = new HashMap<>();
         seatAlphabetMap.put(0, "A");
         seatAlphabetMap.put(1, "B");
@@ -86,28 +102,47 @@ public class SeatListActivity extends BaseActivity2{
                 row++;
             }
             if (i % 7 == 3) {
+                // Add empty space for aisle
                 seatList.add(new Seat(Seat.SeatStatus.EMPTY, String.valueOf(row)));
             } else {
                 String seatName = seatAlphabetMap.get(i % 7) + row;
-                Seat.SeatStatus seatStatus = flight.getReservedSeats().contains(seatName) ? Seat.SeatStatus.UNAVAILABLE : Seat.SeatStatus.AVAILABLE;
+                Seat.SeatStatus seatStatus = (flight.getReservedSeats() != null &&
+                        flight.getReservedSeats().contains(seatName))
+                        ? Seat.SeatStatus.UNAVAILABLE
+                        : Seat.SeatStatus.AVAILABLE;
                 seatList.add(new Seat(seatStatus, seatName));
             }
         }
+
+        // Debug logging
+        Log.d("SeatDebug", "Generated " + seatList.size() + " seats");
+        for (Seat seat : seatList) {
+            Log.d("SeatDebug", "Seat: " + seat.getName() + " - " + seat.getStatus());
+        }
+
         SeatAdapter seatAdapter = new SeatAdapter(seatList, this, (selectedName, num) -> {
-            binding.numberSelectedTxt.setText(num+"Seat Selected");
-            binding.numberSelectedTxt.setText(selectedName);
+            binding.numberSelectedTxt.setText(num + " Seat Selected: " + selectedName);
             DecimalFormat df = new DecimalFormat("#.##");
-            price = Double.valueOf(df.format(num * Double.parseDouble(flight.getPrice())));
+            price = Double.valueOf(df.format(num * ("$"+flight.getPrice() != null ?+flight.getPrice() : 0.0)));
             this.num = num;
-            binding.priceTxt.setText("$"+price);
+            binding.priceTxt.setText("$" + price);
         });
+
         binding.seatRecyclerView.setAdapter(seatAdapter);
         binding.seatRecyclerView.setNestedScrollingEnabled(false);
     }
 
-        private void getIntentExtra() {
-            flight = (Flight) getIntent().getSerializableExtra("name: Flight");
+    private void getIntentExtra() {
+        flight = (Flight) getIntent().getSerializableExtra("flight");
+        if (flight == null) {
+            Log.e("SeatListActivity", "Received null Flight object");
+            Toast.makeText(this, "Error: Flight data not available", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
+        Log.d("SeatListActivity", "Received flight: " + flight.toString());
+    }
+
 }
         
 

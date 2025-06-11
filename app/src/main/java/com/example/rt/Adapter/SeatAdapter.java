@@ -29,14 +29,12 @@ public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.SeatViewHolder
         this.context = context;
         this.selectedSeat = selectedSeat;
     }
-
     @NonNull
     @Override
     public SeatAdapter.SeatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         SeatItemBinding binding = SeatItemBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
         return new SeatViewHolder(binding);
     }
-
     @Override
     public void onBindViewHolder(@NonNull SeatViewHolder holder, int position) {
         Seat seat = seatList.get(position);
@@ -69,7 +67,6 @@ public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.SeatViewHolder
                 seat.setStatus(Seat.SeatStatus.AVAILABLE);
                 selectedSeatName.remove(seat.getName());
                 notifyItemChanged(position);
-
             }
 
             String selected = selectedSeatName.toString()
@@ -86,7 +83,6 @@ public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.SeatViewHolder
     public int getItemCount() {
         return 0;
     }
-
     public static class SeatViewHolder extends RecyclerView.ViewHolder {
         SeatItemBinding binding;
         public SeatViewHolder(@NonNull SeatItemBinding binding) {
