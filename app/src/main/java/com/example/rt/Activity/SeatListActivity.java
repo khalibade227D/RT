@@ -53,7 +53,7 @@ public class SeatListActivity extends BaseActivity2{
                 flight.setPassenger(binding.nameSeatSelectedTxt.getText().toString());
                 flight.setPrice(price);
                 Intent intent = new Intent(SeatListActivity.this,TicketDetailActivity.class);
-                intent.putExtra("fight",flight);
+                intent.putExtra("flight",flight);
                 startActivity(intent);
             }else{
                 Toast.makeText(SeatListActivity.this,"Please select your seat",Toast.LENGTH_SHORT).show();
@@ -107,24 +107,24 @@ public class SeatListActivity extends BaseActivity2{
             } else {
                 String seatName = seatAlphabetMap.get(i % 7) + row;
                 Seat.SeatStatus seatStatus = (flight.getReservedSeats() != null &&
-                        flight.getReservedSeats().contains(seatName))
+                       flight.getReservedSeats().contains("\"" + seatName + "\""))
                         ? Seat.SeatStatus.UNAVAILABLE
                         : Seat.SeatStatus.AVAILABLE;
                 seatList.add(new Seat(seatStatus, seatName));
             }
         }
 
-        // Debug logging
-        Log.d("SeatDebug", "Generated " + seatList.size() + " seats");
-        for (Seat seat : seatList) {
-            Log.d("SeatDebug", "Seat: " + seat.getName() + " - " + seat.getStatus());
-        }
+//        // Debug logging
+//        Log.d("SeatDebug", "Generated " + seatList.size() + " seats");
+//        for (Seat seat : seatList) {
+//            Log.d("SeatDebug", "Seat: " + seat.getName() + " - " + seat.getStatus());
+//        }
 
         SeatAdapter seatAdapter = new SeatAdapter(seatList, this, (selectedName, num) -> {
-            binding.numberSelectedTxt.setText(num + " Seat Selected: " + selectedName);
+            binding.numberSelectedTxt.setText(num + " Seat Selected: ");
+            binding.nameSeatSelectedTxt.setText(selectedName);
             DecimalFormat df = new DecimalFormat("#.##");
-            price = Double.valueOf(df.format(num * ("$"+flight.getPrice() != null ?+flight.getPrice() : 0.0)));
-            this.num = num;
+            price = Double.valueOf(df.format(num * flight.getPrice()));this.num = num;
             binding.priceTxt.setText("$" + price);
         });
 
