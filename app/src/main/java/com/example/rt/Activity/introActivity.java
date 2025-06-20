@@ -19,6 +19,7 @@ private ActivityIntroBinding binding;
         binding = ActivityIntroBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.StartBtn.setOnClickListener(v -> startActivity(new Intent(introActivity.this, MainActivity1.class)));
+        binding.StartBtn.setOnClickListener(v -> startActivity(new Intent(introActivity.this, SignUpActivity.class)));
+        binding.THAbutton.setOnClickListener(v -> startActivity(new Intent(introActivity.this, LoginActivity.class)));
     }
 }

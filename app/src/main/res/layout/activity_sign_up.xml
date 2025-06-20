@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightgrey"
     tools:context=".Activity.SignUpActivity">
     <ScrollView
         android:layout_width="match_parent"
@@ -48,37 +49,37 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_goneMarginStart="8dp" />
-            />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="20dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/white_bg"
-        android:elevation="3dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/light_grey_bg"
+        android:elevation="5dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="15dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="28dp">
+                android:padding="15dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Welcome"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
                     android:textColor="@color/blue"
                     android:textSize="25sp"
                     android:textStyle="bold"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:alpha="0.5"
                     android:text="Signup with JourneyLine"
-                    android:alpha="0.7"/>
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"/>
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"/>
@@ -86,11 +87,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Name"
-                    android:alpha="0.7"
+                    android:textColor="@color/black"
+                    android:alpha="0.6"
+                    android:textStyle="bold"/>
+                <EditText
+                    android:id="@+id/SName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:alpha="0.6"
+                    android:inputType="textPersonName"/>
+                <!--android:hint="Name"
+
+                -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:alpha="0.6"
+                    android:textColor="@color/black"
                     android:textStyle="bold"/>
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:alpha="0.6"
+                    android:id="@+id/SUsername"
                     android:inputType="textPersonName"/>
                 <View
                     android:layout_width="wrap_content"
@@ -100,12 +122,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Email Address"
-                    android:alpha="0.7"
+                    android:alpha="0.6"
+                    android:textColor="@color/black"
                     android:textStyle="bold"/>
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
+                    android:textColor="@color/black"
+                    android:id="@+id/SEmail"
+                    android:alpha="0.6"
                     android:drawableEnd="@drawable/done_icon"/>
                 <View
                     android:layout_width="wrap_content"
@@ -115,12 +141,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Password"
-                    android:alpha="0.7"
+                    android:alpha="0.6"
+                    android:textColor="@color/black"
                     android:textStyle="bold"/>
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
+                    android:alpha="0.6"
+                    android:id="@+id/SPassword"
+                    android:textColor="@color/black"
                     android:drawableEnd="@drawable/password_icon"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -135,12 +165,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="10dp"/>
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/SButton"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:textColor="@color/white"
                     android:background="@drawable/blue_bg"
-                    android:text="Signup"
-                    app:cornerRadius="50dp"/>
+                    android:text="Signup"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/LoginRedirectText"
+                    android:alpha="0.6"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:padding="8dp"
+                    android:text="Already a user? login"/>
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="10dp"/>
