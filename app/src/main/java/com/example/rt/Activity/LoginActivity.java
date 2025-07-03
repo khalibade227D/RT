@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -24,11 +25,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity2{
 
     EditText LUsername,LPassword;
     TextView SignupRedirectText;
     Button LButton;
+//    CheckBox RememberMe;
     FirebaseDatabase database;
     DatabaseReference reference;
 
@@ -37,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
+//        RememberMe = findViewById(R.id.RememberMe);
         LUsername = findViewById(R.id.LUsername);
         LPassword = findViewById(R.id.LPassword);
         SignupRedirectText = findViewById(R.id.SignupRedirectText);
@@ -65,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
         }
+
+
     public Boolean validateUsername() {
         String val = LUsername.getText().toString();
         if (val.isEmpty()) {
@@ -102,16 +106,21 @@ public class LoginActivity extends AppCompatActivity {
                     if(!Objects.equals(passwordFromdb,userPassword)){
                         LUsername.setError(null);
                         Intent intent = new Intent(LoginActivity.this, MainActivity1.class);
-
+                        intent.putExtra("USERNAME", userUsername);
+                        Clear();
                         startActivity(intent);
 
-                    }else{
+                    }
+                    else{
                         LUsername.setError("Invalid Credential");
                         LUsername.requestFocus();
+                        Clear();
+
                     }
                 }else{
                     LUsername.setError("User does not exist");
                     LUsername.requestFocus();
+                    Clear();
                 }
             }
 
@@ -120,6 +129,10 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+    public void Clear(){
+        LUsername.setText("");
+        LPassword.setText("");
     }
 
 }

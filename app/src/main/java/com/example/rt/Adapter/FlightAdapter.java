@@ -1,4 +1,6 @@
 package com.example.rt.Adapter;
+import static android.content.Intent.getIntent;
+
 import android.view.View;
 import android.content.Context;
 import android.content.Intent;
@@ -75,7 +77,8 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ViewHolder
         holder.binding.toShortTxt.setText(flight.getToShort() != null ? flight.getToShort() : "N/A");
         holder.binding.arrivalTxt.setText(flight.getArriveTime() != null ? flight.getArriveTime() : "N/A");
         holder.binding.classTxt.setText(flight.getClassSeat() != null ? flight.getClassSeat() : "N/A");
-        holder.binding.priceTxt.setText("$"+flight.getPrice() != null ? "$" + flight.getPrice() : "$0");
+        Double p =  flight.getPrice();
+        holder.binding.priceTxt.setText("₦" + p * 30);
 
         holder.itemView.setOnClickListener(v -> {
             // Double-check flight is not null before starting new activity

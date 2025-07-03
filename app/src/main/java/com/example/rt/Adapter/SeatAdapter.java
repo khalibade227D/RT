@@ -81,7 +81,7 @@ public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.SeatViewHolder
 
     @Override
     public int getItemCount() {
-        return seatList.size(); // ✅ Return actual list size
+        return seatList.size();
     }
     public static class SeatViewHolder extends RecyclerView.ViewHolder {
         SeatItemBinding binding;

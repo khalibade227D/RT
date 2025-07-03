@@ -27,35 +27,15 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/world" />
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="48dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ha" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="96dp"
-            android:layout_marginTop="80dp"
-            android:text="khalifa Abdullahi"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_goneMarginStart="8dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="15dp"
-        android:background="@drawable/light_grey_bg"
-        android:elevation="5dp"
+        android:background="@drawable/white_bg"
+        android:elevation="10dp"
         android:orientation="vertical"
         android:padding="15dp">
 
@@ -76,82 +56,87 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:alpha="0.5"
+                    android:alpha="0.7"
                     android:text="Signup with JourneyLine"
+                    android:fontFamily="@font/k"
                     android:layout_gravity="center"
                     android:textColor="@color/black"/>
                 <View
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textColor="@color/black"
-                    android:alpha="0.6"
-                    android:textStyle="bold"/>
+                    android:layout_height="20dp"/>
                 <EditText
                     android:id="@+id/SName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:alpha="0.6"
-                    android:inputType="textPersonName"/>
-                <!--android:hint="Name"
-
-                -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Username"
-                    android:alpha="0.6"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"/>
-                <EditText
+                    android:layout_height="50dp"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold"
+                    android:hint="Name"
+                    android:textSize="15sp"
+                    android:textColorHint="@color/grey"
+                    android:paddingStart="12dp"
+                    android:layout_margin="3dp"
+                    android:padding="3dp"
+                    android:inputType="textPersonName"
+                    android:elevation="5dp"
+                    android:background="@drawable/light_grey_bg"
+                    />
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:alpha="0.6"
+                    android:layout_height="20dp"/>
+                <EditText
                     android:id="@+id/SUsername"
-                    android:inputType="textPersonName"/>
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="10dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email Address"
-                    android:alpha="0.6"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"/>
-                <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/black"
-                    android:id="@+id/SEmail"
-                    android:alpha="0.6"
-                    android:drawableEnd="@drawable/done_icon"/>
+                    android:layout_height="50dp"
+                    android:textSize="15sp"
+                    android:textColorHint="@color/grey"
+                    android:hint="Username"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold"
+                    android:paddingStart="12dp"
+                    android:layout_margin="3dp"
+                    android:padding="3dp"
+                    android:elevation="3dp"
+                    android:background="@drawable/light_grey_bg"
+                    />
                 <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="10dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Password"
-                    android:alpha="0.6"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"/>
-                <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:alpha="0.6"
+                    android:layout_height="20dp"/>
+                <EditText
+                android:id="@+id/SEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                    android:textSize="15sp"
+                android:textColor="@color/grey"
+                android:textStyle="bold"
+                android:hint="Email"
+                android:textColorHint="@color/grey"
+                android:paddingStart="12dp"
+                android:layout_margin="3dp"
+                android:padding="3dp"
+                android:inputType="textEmailAddress"
+                android:elevation="4dp"
+                android:background="@drawable/light_grey_bg"
+                />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+                <EditText
                     android:id="@+id/SPassword"
-                    android:textColor="@color/black"
-                    android:drawableEnd="@drawable/password_icon"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textSize="15sp"
+                    android:textColorHint="@color/grey"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold"
+                    android:paddingStart="12dp"
+                    android:layout_margin="3dp"
+                    android:padding="3dp"
+                    android:elevation="3dp"
+                    android:background="@drawable/light_grey_bg"
+                    />
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -192,11 +177,13 @@
                     android:orientation="horizontal"
                     android:gravity="center">
                     <ImageView
+                        android:id="@+id/Facebook"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_margin="12dp"
                         android:background="@drawable/facebook_5968764"/>
                     <ImageView
+                        android:id="@+id/Github"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_margin="12dp"

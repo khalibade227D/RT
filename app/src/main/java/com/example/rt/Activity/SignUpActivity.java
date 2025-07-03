@@ -1,10 +1,12 @@
 package com.example.rt.Activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,9 +21,10 @@ import com.example.rt.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends BaseActivity2{
     EditText SName,SEmail,SUsername,SPassword;
     TextView LoginRedirectText;
+    ImageView Github,Facebook;
     Button SButton;
     FirebaseDatabase database;
     DatabaseReference reference;
@@ -37,6 +40,20 @@ public class SignUpActivity extends AppCompatActivity {
         SButton = findViewById(R.id.SButton);
         LoginRedirectText = findViewById(R.id.LoginRedirectText);
 
+        Github = findViewById(R.id.Github);
+        Facebook = findViewById(R.id.Facebook);
+        Github.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoUrl("https://github.com/khalibade227D");
+            }
+        });
+        Facebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoUrl("https://web.facebook.com/khalifa.abdullahi.143289");
+            }
+        });
         SButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,6 +73,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }else{
                      Toast.makeText(SignUpActivity.this, "You have Signup Successfully", Toast.LENGTH_SHORT).show();
                      Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                     Clear();
                      startActivity(intent);
                 }
             }
@@ -66,12 +84,19 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SignUpActivity.this,LoginActivity.class);
+                Clear();
                 startActivity(intent);
 
             }
         });
 
     }
+
+    private void gotoUrl(String s) {
+        Uri uri  = Uri.parse(s);
+        startActivity(new Intent(Intent.ACTION_VIEW,uri));
+    }
+
     public Boolean validateUsername() {
         String val = SUsername.getText().toString();
         if (val.isEmpty()) {
@@ -114,5 +139,11 @@ public class SignUpActivity extends AppCompatActivity {
             return true;
         }
 
+    }
+    public void Clear(){
+        SUsername.setText("");
+        SPassword.setText("");
+        SEmail.setText("");
+        SName.setText("");
     }
 }

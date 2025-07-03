@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 
 import com.example.rt.Model.Location;
@@ -17,15 +16,12 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-import android.util.Log;
-import android.widget.Toast;
 
 public class MainActivity1 extends BaseActivity2 {
     private ActivityMain1Binding binding;
@@ -35,20 +31,14 @@ public class MainActivity1 extends BaseActivity2 {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  EdgeToEdge.enable(this);
-        // Verify Firebase initialization
         try {
             if (FirebaseApp.getApps(this).isEmpty()) {
-                Log.e("Firebase", "Not initialized! Check Application class");
                 finish(); // Close app if Firebase isn't working
                 return;
             }
-
-            database = FirebaseDatabase.getInstance();
+//            database = FirebaseDatabase.getInstance();
             // Rest of your onCreate code...
         } catch (Exception e) {
-            Log.e("Firebase", "Initialization error", e);
-            // Show error to user and exit
             finish();
         }
 
@@ -62,16 +52,30 @@ public class MainActivity1 extends BaseActivity2 {
             initClassSeat();
             initDatePickup();
             setVariable();
+            Welcome();
         }
 
+    private void Welcome() {
+        String username = (getIntent().getStringExtra("USERNAME")).toLowerCase();
+        if (username != null && !username.isEmpty()) {
+            binding.txtWelcome.setText("Welcome " + username + " 🙌!");
+
+
+
+        }
+
+    }
+
     private void setVariable() {
-        binding.searchBtn.setOnClickListener(v -> {
+            binding.searchBtn.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity1.this, SearchActivity.class);
             intent.putExtra("from", ((Location) binding.fromSp.getSelectedItem()).getName());
             intent.putExtra("to", ((Location) binding.toSp.getSelectedItem()).getName());
             intent.putExtra("date", binding.departureDateTxt.getText().toString());
             intent.putExtra("numPassenger", adultPassenger + childPassenger);
+            intent.putExtra("USERNAME",binding.txtWelcome.isShown());
             startActivity(intent);
+
         });
     }
 

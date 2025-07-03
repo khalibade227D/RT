@@ -9,6 +9,7 @@
     tools:context=".Activity.TicketDetailActivity">
 
     <ScrollView
+        android:id="@+id/SV"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,6 +19,7 @@
             android:orientation="vertical" >
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/FirstL"
                 android:layout_width="match_parent"
                 android:background="@drawable/blue_bg_bottom_corner"
                 android:layout_height="135dp">
@@ -53,9 +55,16 @@
                     app:layout_constraintBottom_toBottomOf="@+id/backBtn"
                     app:layout_constraintStart_toEndOf="@+id/backBtn"
                     app:layout_constraintTop_toTopOf="@+id/backBtn" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+        <FrameLayout
+            android:id="@+id/Ticket"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_margin="24dp"
                 android:background="@drawable/white_bg"
@@ -69,6 +78,20 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/Welcome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="@id/logo"
+                        app:layout_constraintEnd_toEndOf="@id/logo"
+                        android:text="welcome"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/k"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="200dp"
+                        app:layout_constraintBottom_toBottomOf="@id/logo"/>
 
                     <ImageView
                         android:id="@+id/logo"
@@ -345,25 +368,32 @@
                 <ImageView
                     android:id="@+id/imageView21"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="74dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="24dp"
                     app:srcCompat="@drawable/barcode" />
+
+
             </LinearLayout>
+            </FrameLayout>
+
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/downloadTicketBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="24dp"
-                style="@android:style/Widget.Button"
                 android:background="@drawable/blue_bg"
-                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="Download Ticket"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Download Ticket" />
+                android:textStyle="bold" />
+
+
         </LinearLayout>
     </ScrollView>
 

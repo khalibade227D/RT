@@ -42,7 +42,6 @@ public class SearchActivity extends BaseActivity2 {
         binding = ActivitySearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Initialize Firebase
         database = FirebaseDatabase.getInstance();
         flightsRef = database.getReference("Flights"); // Note: "Flights" (uppercase)
 

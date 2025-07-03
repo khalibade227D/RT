@@ -31,9 +31,6 @@ public class SeatListActivity extends BaseActivity2{
     private Flight flight;
     private Double price = 0.0;
     private int num = 0;
-    
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,19 +110,13 @@ public class SeatListActivity extends BaseActivity2{
                 seatList.add(new Seat(seatStatus, seatName));
             }
         }
-
-//        // Debug logging
-//        Log.d("SeatDebug", "Generated " + seatList.size() + " seats");
-//        for (Seat seat : seatList) {
-//            Log.d("SeatDebug", "Seat: " + seat.getName() + " - " + seat.getStatus());
-//        }
-
+        
         SeatAdapter seatAdapter = new SeatAdapter(seatList, this, (selectedName, num) -> {
             binding.numberSelectedTxt.setText(num + " Seat Selected: ");
             binding.nameSeatSelectedTxt.setText(selectedName);
             DecimalFormat df = new DecimalFormat("#.##");
             price = Double.valueOf(df.format(num * flight.getPrice()));this.num = num;
-            binding.priceTxt.setText("$" + price);
+            binding.priceTxt.setText("₦" + price * 30);
         });
 
         binding.seatRecyclerView.setAdapter(seatAdapter);
@@ -135,12 +126,11 @@ public class SeatListActivity extends BaseActivity2{
     private void getIntentExtra() {
         flight = (Flight) getIntent().getSerializableExtra("flight");
         if (flight == null) {
-            Log.e("SeatListActivity", "Received null Flight object");
             Toast.makeText(this, "Error: Flight data not available", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
-        Log.d("SeatListActivity", "Received flight: " + flight.toString());
+
     }
 
 }
