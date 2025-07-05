@@ -82,17 +82,17 @@ public class LoginActivity extends BaseActivity2{
         public Boolean validatePassword(){
             String val = LPassword.getText().toString();
             if(val.isEmpty()){
-                LUsername.setError("password cannot be empty");
+                LPassword.setError("password cannot be empty");
                 return false;
             }else{
-                LUsername.setError(null);
+                LPassword.setError(null);
                 return true;
             }
 
     }
     public void CheckUser(){
-        String userUsername = LUsername.getText().toString();
-        String userPassword = LPassword.getText().toString();
+        String userUsername = LUsername.getText().toString().trim();
+        String userPassword = LPassword.getText().toString().trim();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
         Query CheckUserDatabase = reference.orderByChild("username").equalTo(userUsername);
@@ -101,23 +101,27 @@ public class LoginActivity extends BaseActivity2{
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    LUsername.setError(null);
-                    String passwordFromdb = snapshot.child(userUsername).child("password").getValue(String.class);
-                    if(!Objects.equals(passwordFromdb,userPassword)){
-                        LUsername.setError(null);
-                        Intent intent = new Intent(LoginActivity.this, MainActivity1.class);
-                        intent.putExtra("USERNAME", userUsername);
-                        Clear();
-                        startActivity(intent);
+                    // Iterate through the results (even though there should be only one)
+                    for(DataSnapshot userSnapshot : snapshot.getChildren()){
+                        String passwordFromdb = userSnapshot.child("password").getValue(String.class);
+                        String usernameFromdb = userSnapshot.child("username").getValue(String.class);
 
+                        if(passwordFromdb != null && passwordFromdb.equals(userPassword)){
+                            // Credentials match
+                            LUsername.setError(null);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity1.class);
+                            intent.putExtra("USERNAME", userUsername);
+                            startActivity(intent);
+                            Clear();
+                            return; // Exit after successful login
+                        }
                     }
-                    else{
-                        LUsername.setError("Invalid Credential");
-                        LUsername.requestFocus();
-                        Clear();
 
-                    }
-                }else{
+                    // If we get here, either password didn't match or user data was malformed
+                    LUsername.setError("Invalid Credential");
+                    LUsername.requestFocus();
+                    Clear();
+                } else {
                     LUsername.setError("User does not exist");
                     LUsername.requestFocus();
                     Clear();
@@ -126,7 +130,9 @@ public class LoginActivity extends BaseActivity2{
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                // Handle database error
+                LUsername.setError("Database error: " + error.getMessage());
+                LUsername.requestFocus();
             }
         });
     }

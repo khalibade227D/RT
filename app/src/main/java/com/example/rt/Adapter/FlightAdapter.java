@@ -71,6 +71,8 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ViewHolder
         }
 
         // Safely set text fields with null checks
+        holder.binding.Time.setText(flight.getTime() != null ? flight.getTime() : "N/A");
+        holder.binding.departureDateTxt.setText(flight.getDate() != null ? flight.getDate() : "N/A");
         holder.binding.fromTxt.setText(flight.getFrom() != null ? flight.getFrom() : "N/A");
         holder.binding.fromShortTxt.setText(flight.getFromShort() != null ? flight.getFromShort() : "N/A");
         holder.binding.toTxt.setText(flight.getTo() != null ? flight.getTo() : "N/A");
@@ -78,7 +80,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ViewHolder
         holder.binding.arrivalTxt.setText(flight.getArriveTime() != null ? flight.getArriveTime() : "N/A");
         holder.binding.classTxt.setText(flight.getClassSeat() != null ? flight.getClassSeat() : "N/A");
         Double p =  flight.getPrice();
-        holder.binding.priceTxt.setText("₦" + p * 30);
+        holder.binding.priceTxt.setText("₦" + p);
 
         holder.itemView.setOnClickListener(v -> {
             // Double-check flight is not null before starting new activity
@@ -89,7 +91,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ViewHolder
                 context.startActivity(intent);
             } else {
                 Log.e("FlightAdapter", "Cannot navigate - flight is null");
-                Toast.makeText(context, "Flight information not available", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Ticket information not available", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -68,10 +68,11 @@
                     android:id="@+id/txtWelcome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/k"
                     android:text="Explore the world\n with us"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginStart="30dp"
+                    android:textSize="13sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView3"
@@ -85,11 +86,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleY="0.95"
                 android:layout_margin="20dp"
                 android:layout_marginTop="0dp"
                 android:background="@drawable/white_bg"
-                android:elevation="3dp"
+                android:elevation="4dp"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -110,11 +110,13 @@
                         android:id="@+id/imageView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="5dp"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/from_ic" />
+                        app:srcCompat="@drawable/go" />
 
                     <Spinner
                         android:id="@+id/fromSp"
@@ -159,11 +161,13 @@
                         android:id="@+id/imageView6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="5dp"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/to_ic" />
+                        app:srcCompat="@drawable/backk" />
 
                     <Spinner
                         android:id="@+id/toSp"
@@ -343,7 +347,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:textColor="@color/black"
-                            android:text="Departure date" />
+                            android:text="Booking date" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -373,49 +377,14 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="0.5"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView12"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:textColor="@color/black"
-                            android:text="Return date" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/light_grey_bg"
-                            android:orientation="horizontal">
-
-
-                            <ImageView
-                                android:id="@+id/imageView8"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="8dp"
-                                app:srcCompat="@drawable/calendar_ic" />
-
-                            <TextView
-                                android:id="@+id/returnDateTxt"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text="-"
-                                android:textColor="@color/black" />
-
-
-                        </LinearLayout>
-                    </LinearLayout>
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginStart="12dp"-->
+<!--                        android:layout_weight="0.5"-->
+<!--                        android:orientation="vertical">-->
+<!--                        -->
+<!--                    </LinearLayout>-->
 
                 </LinearLayout>
 

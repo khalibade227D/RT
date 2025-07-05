@@ -85,7 +85,7 @@ private void getIntentExtra() {
         binding.timeTxt.setText(flight.getTime());
         binding.arrivalTxt.setText(flight.getArriveTime());
         binding.classTxt.setText(flight.getClassSeat());
-        binding.priceTxt.setText("₦" + flight.getPrice() * 30);
+        binding.priceTxt.setText("₦" + flight.getPrice());
         binding.train.setText(flight.getTrainName());
         binding.seatTxt.setText(flight.getPassenger());
 

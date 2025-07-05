@@ -60,12 +60,10 @@ public class SeatListActivity extends BaseActivity2{
 
     private void initSeatList() {
         if (flight == null || flight.getNumberSeat() == null || flight.getNumberSeat() == 0) {
-            Log.e("SeatListDebug", "Invalid flight data!");
             Toast.makeText(this, "No seats available", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Properly initialize reservedSeats if null
         if (flight.getReservedSeats() == null) {
             flight.setReservedSeats("");
         }
@@ -116,7 +114,7 @@ public class SeatListActivity extends BaseActivity2{
             binding.nameSeatSelectedTxt.setText(selectedName);
             DecimalFormat df = new DecimalFormat("#.##");
             price = Double.valueOf(df.format(num * flight.getPrice()));this.num = num;
-            binding.priceTxt.setText("₦" + price * 30);
+            binding.priceTxt.setText("₦" + price);
         });
 
         binding.seatRecyclerView.setAdapter(seatAdapter);

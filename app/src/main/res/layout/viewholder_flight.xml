@@ -21,6 +21,36 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
+
+    <TextView
+        android:id="@+id/departureDateTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:text="Date"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginStart="15dp"
+        android:textColor="@color/blue"
+        app:layout_constraintBottom_toTopOf="@+id/fromTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Time"
+        android:textSize="15sp"
+        android:layout_marginStart="15dp"
+        android:textStyle="bold"
+        android:textColor="@color/blue"
+        app:layout_constraintBottom_toTopOf="@+id/fromTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/arrivalTxt"
         android:layout_width="wrap_content"

@@ -43,7 +43,7 @@ public class SearchActivity extends BaseActivity2 {
         setContentView(binding.getRoot());
 
         database = FirebaseDatabase.getInstance();
-        flightsRef = database.getReference("Flights"); // Note: "Flights" (uppercase)
+        flightsRef = database.getReference("Flights");
 
         // Initialize RecyclerView
         adapter = new FlightAdapter(new ArrayList<>());
@@ -75,7 +75,7 @@ public class SearchActivity extends BaseActivity2 {
                 }
 
                 if (filteredFlights.isEmpty()) {
-                    Toast.makeText(SearchActivity.this, "No flights found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchActivity.this, "No Ticket found", Toast.LENGTH_SHORT).show();
                 } else {
                     adapter.updateList(filteredFlights); // Update adapter
                 }

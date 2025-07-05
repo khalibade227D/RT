@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.example.rt.Model.Location;
 import com.example.rt.R;
 import com.example.rt.databinding.ActivityMain1Binding;
+import com.example.rt.databinding.ActivityLoginBinding;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -52,19 +53,17 @@ public class MainActivity1 extends BaseActivity2 {
             initClassSeat();
             initDatePickup();
             setVariable();
-            Welcome();
+//            Welcome();
         }
 
-    private void Welcome() {
-        String username = (getIntent().getStringExtra("USERNAME")).toLowerCase();
-        if (username != null && !username.isEmpty()) {
-            binding.txtWelcome.setText("Welcome " + username + " 🙌!");
-
-
-
-        }
-
-    }
+//    private void Welcome() {
+//        TextView txtwelcome;
+//   holder.
+//        txtwelcome = findViewById(R.id.txtWelcome);
+//        LUsername = findViewById(R.id.LUsername);
+//        txtwelcome.setText("Welcome "+LUsername+" 🙌");
+//
+//    }
 
     private void setVariable() {
             binding.searchBtn.setOnClickListener(v -> {
@@ -73,7 +72,7 @@ public class MainActivity1 extends BaseActivity2 {
             intent.putExtra("to", ((Location) binding.toSp.getSelectedItem()).getName());
             intent.putExtra("date", binding.departureDateTxt.getText().toString());
             intent.putExtra("numPassenger", adultPassenger + childPassenger);
-            intent.putExtra("USERNAME",binding.txtWelcome.isShown());
+            intent.putExtra("USERNAME", binding.txtWelcome.getText());
             startActivity(intent);
 
         });
@@ -86,11 +85,11 @@ public class MainActivity1 extends BaseActivity2 {
 
         Calendar calendarTomorrow = Calendar.getInstance();
         calendarTomorrow.add(Calendar.DAY_OF_YEAR, 1);
-        String tomorrowDate = dateFormat.format(calendarTomorrow.getTime());
-        binding.returnDateTxt.setText(tomorrowDate);
+//        String tomorrowDate = dateFormat.format(calendarTomorrow.getTime());
+//        binding.returnDateTxt.setText(tomorrowDate);
 
-        binding.departureDateTxt.setOnClickListener(v -> showDatePickerDialog(binding.departureDateTxt));
-        binding.returnDateTxt.setOnClickListener(v -> showDatePickerDialog(binding.returnDateTxt));
+//        binding.departureDateTxt.setOnClickListener(v -> showDatePickerDialog(binding.departureDateTxt));
+//        binding.returnDateTxt.setOnClickListener(v -> showDatePickerDialog(binding.returnDateTxt));
 
 
     }
@@ -163,19 +162,19 @@ public class MainActivity1 extends BaseActivity2 {
             });
     }
 
-    private void showDatePickerDialog(TextView textView){
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,(view,selectedYear,selectedMonth,selectedDay)->{
-            calendar.set(selectedYear,selectedMonth,selectedDay);
-            String formattedDate = dateFormat.format(calendar.getTime());
-            textView.setText(formattedDate);
-        },year,month,day);
-        datePickerDialog.show();
-
-    }
+//    private void showDatePickerDialog(TextView textView){
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH);
+//        int day = calendar.get(Calendar.DAY_OF_MONTH);
+//
+//        DatePickerDialog datePickerDialog = new DatePickerDialog(this,(view,selectedYear,selectedMonth,selectedDay)->{
+//            calendar.set(selectedYear,selectedMonth,selectedDay);
+//            String formattedDate = dateFormat.format(calendar.getTime());
+//            textView.setText(formattedDate);
+//        },year,month,day);
+//        datePickerDialog.show();
+//
+//    }
 
 
 }
