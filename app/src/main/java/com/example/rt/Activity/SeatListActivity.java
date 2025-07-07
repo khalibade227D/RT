@@ -22,6 +22,7 @@ import com.example.rt.databinding.ActivitySeatListBinding;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,10 +79,7 @@ public class SeatListActivity extends BaseActivity2{
         binding.seatRecyclerView.setLayoutManager(gridLayoutManager);
 
         List<Seat> seatList = new ArrayList<>();
-        int row = 0;
-
-        // Calculate total seats needed (including empty spaces)
-        int numberSeat = flight.getNumberSeat() + (flight.getNumberSeat() / 7) + 1;
+        int row = 0;  // We'll increment this at the start of each row
 
         Map<Integer, String> seatAlphabetMap = new HashMap<>();
         seatAlphabetMap.put(0, "A");
@@ -92,19 +90,28 @@ public class SeatListActivity extends BaseActivity2{
         seatAlphabetMap.put(5, "F");
         seatAlphabetMap.put(6, "G");
 
+// Calculate total seats including empty spaces for aisles
+        int numberSeat = flight.getNumberSeat() + (flight.getNumberSeat() / 7) + 1;
+
+// Get reserved seats as a list
+        String reservedSeatsStr = flight.getReservedSeats() != null ?
+                flight.getReservedSeats() : "";
+        List<String> reservedSeats = Arrays.asList(reservedSeatsStr.split(","));
+
         for (int i = 0; i < numberSeat; i++) {
             if (i % 7 == 0) {
-                row++;
+                row++;  // Increment row for each new row of seats
             }
+
             if (i % 7 == 3) {
                 // Add empty space for aisle
-                seatList.add(new Seat(Seat.SeatStatus.EMPTY, String.valueOf(row)));
+                seatList.add(new Seat(Seat.SeatStatus.EMPTY, "Aisle"));
             } else {
                 String seatName = seatAlphabetMap.get(i % 7) + row;
-                Seat.SeatStatus seatStatus = (flight.getReservedSeats() != null &&
-                       flight.getReservedSeats().contains("\"" + seatName + "\""))
-                        ? Seat.SeatStatus.UNAVAILABLE
-                        : Seat.SeatStatus.AVAILABLE;
+                boolean isReserved = reservedSeats.contains(seatName);
+                Seat.SeatStatus seatStatus = isReserved ?
+                        Seat.SeatStatus.UNAVAILABLE :
+                        Seat.SeatStatus.AVAILABLE;
                 seatList.add(new Seat(seatStatus, seatName));
             }
         }
