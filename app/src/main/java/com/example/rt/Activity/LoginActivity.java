@@ -27,12 +27,14 @@ import java.util.Objects;
 
 public class LoginActivity extends BaseActivity2{
 
-    EditText LUsername,LPassword;
+     EditText LUsername,LPassword;
     TextView SignupRedirectText;
     Button LButton;
 //    CheckBox RememberMe;
     FirebaseDatabase database;
     DatabaseReference reference;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

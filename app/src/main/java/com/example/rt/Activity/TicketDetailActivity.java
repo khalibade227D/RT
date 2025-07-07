@@ -39,6 +39,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 public class TicketDetailActivity extends BaseActivity2{
 
@@ -57,10 +58,17 @@ public class TicketDetailActivity extends BaseActivity2{
         WELCOME();
         getIntentExtra();
         setVariable();
+        TicketCode();
+    }
+
+    private void TicketCode() {
+        Random random = new Random();
+        int num = random.nextInt(10000000)+99999999;
+       binding.Code.setText("Code: " + num);
     }
 
 
-private void WELCOME() {
+    private void WELCOME() {
     binding.Welcome.setText("JourneyLine, \nThank you for patronizing  🙌!");
 }
 private void getIntentExtra() {

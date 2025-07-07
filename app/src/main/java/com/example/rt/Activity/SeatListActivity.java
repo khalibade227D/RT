@@ -118,7 +118,7 @@ public class SeatListActivity extends BaseActivity2{
         });
 
         binding.seatRecyclerView.setAdapter(seatAdapter);
-        binding.seatRecyclerView.setNestedScrollingEnabled(false);
+        binding.seatRecyclerView.setNestedScrollingEnabled(true);
     }
 
     private void getIntentExtra() {

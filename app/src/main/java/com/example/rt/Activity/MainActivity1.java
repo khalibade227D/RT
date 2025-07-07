@@ -47,23 +47,24 @@ public class MainActivity1 extends BaseActivity2 {
         setContentView(binding.getRoot());
         // In your Application class (or main Activity's onCreate)
 
-
+            Welcome();
             initLocations();
             initPassengers();
             initClassSeat();
             initDatePickup();
             setVariable();
-//            Welcome();
+
         }
 
-//    private void Welcome() {
-//        TextView txtwelcome;
-//   holder.
-//        txtwelcome = findViewById(R.id.txtWelcome);
-//        LUsername = findViewById(R.id.LUsername);
-//        txtwelcome.setText("Welcome "+LUsername+" 🙌");
-//
-//    }
+    private void Welcome() {
+        String Username = getIntent().getStringExtra("USERNAME");
+        if (Username != null && !Username.isEmpty()) {
+            binding.txtWelcome.setText("Welcome "+Username+" 🙌!");
+        } else {
+            binding.txtWelcome.setText("Welcome guest");
+            // or handle the missing username case as needed
+        }
+    }
 
     private void setVariable() {
             binding.searchBtn.setOnClickListener(v -> {
@@ -72,7 +73,7 @@ public class MainActivity1 extends BaseActivity2 {
             intent.putExtra("to", ((Location) binding.toSp.getSelectedItem()).getName());
             intent.putExtra("date", binding.departureDateTxt.getText().toString());
             intent.putExtra("numPassenger", adultPassenger + childPassenger);
-            intent.putExtra("USERNAME", binding.txtWelcome.getText());
+//            intent.putExtra("USERNAME", binding.txtWelcome.getText());
             startActivity(intent);
 
         });
