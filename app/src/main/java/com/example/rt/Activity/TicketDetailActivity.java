@@ -1,7 +1,5 @@
 package com.example.rt.Activity;
 
-import static android.content.Intent.getIntent;
-
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -20,7 +18,6 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.rt.Adapter.SeatAdapter;
 import com.example.rt.Model.Flight;
 import com.example.rt.R;
 import com.example.rt.databinding.ActivityTicketDetailBinding;
@@ -45,13 +43,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 
-public class TicketDetailActivity extends BaseActivity2{
-
+public class TicketDetailActivity extends BaseActivity2 {
 
     private ActivityTicketDetailBinding binding;
     private Flight flight;
@@ -61,7 +62,6 @@ public class TicketDetailActivity extends BaseActivity2{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityTicketDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         WELCOME();
@@ -72,17 +72,16 @@ public class TicketDetailActivity extends BaseActivity2{
 
     private void TicketCode() {
         Random random = new Random();
-        int num = random.nextInt(10000000)+99999999;
-       binding.Code.setText("Code: " + num);
+        int num = random.nextInt(10000000) + 99999999;
+        binding.Code.setText("Code: " + num);
     }
 
-
     private void WELCOME() {
-    binding.Welcome.setText("JourneyLine, \nThank you for patronizing  🙌!");
-}
-private void getIntentExtra() {
-        flight = (Flight) getIntent().getSerializableExtra("flight");
+        binding.Welcome.setText("JourneyLine, \nThank you for patronizing  🙌!");
+    }
 
+    private void getIntentExtra() {
+        flight = (Flight) getIntent().getSerializableExtra("flight");
     }
 
     private void setVariable() {
@@ -107,78 +106,87 @@ private void getIntentExtra() {
         binding.seatTxt.setText(flight.getPassenger());
 
         binding.downloadTicketBtn.setOnClickListener(v -> {
-
             if (checkPermission()) {
-//                checktrain();
+                checkTrain();
                 createPdfFromView();
-                Intent intent = new Intent(this,LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
-
             } else {
                 requestPermission();
             }
         });
-
     }
 
-    private void checktrain() {
-        Query deltaFlightsQuery = FirebaseDatabase.getInstance()
-                .getReference("flights")
-                .orderByChild(binding.train.toString())
-                .equalTo("Delta");
+    private void checkTrain() {
+        String child;
+        String train = binding.train.getText().toString();
 
-        deltaFlightsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot flightSnapshot : snapshot.getChildren()) {
-                    // Get the flight key (e.g., "flight1")
-                    String flightKey = flightSnapshot.getKey();
-                    // Get reference to this flight's reservedSeats
-                    DatabaseReference seatsRef = flightSnapshot.child("reservedSeats").getRef();
-                    // Get current seats (or empty string if null)
-                    String currentSeats = flightSnapshot.child("reservedSeats").getValue(String.class);
-                    if (currentSeats == null) {
-                        currentSeats = "";
-                    }
-                    // Prepare new seats (avoid duplicates)
-                    String newSeats = binding.seatTxt.toString();
-                    String updatedSeats;
+        // Map train name to corresponding flight ID
+        if (train.equals("Delta")) {
+            child = "flight1";
+        } else if (train.equals("American")) {
+            child = "flight2";
+        } else if (train.equals("United")) {
+            child = "flight5";
+        } else if (train.equals("Southwest")) {
+            child = "flight4";
+        } else {
+            child = "flight3";
+        }
 
-                    if (currentSeats.isEmpty()) {
-                        updatedSeats = newSeats;
-                    } else {
-                        // Check if seats already exist
-                        if (!currentSeats.contains( binding.seatTxt.toString())){
-                            updatedSeats = currentSeats + "," + newSeats;
-                        } else {
-                            Log.d("Firebase", "Seats A1 or A2 already reserved");
-                            continue; // Skip to next flight
-                        }
-                    }
+        // Get reference to reservedSeats in Firebase
+        DatabaseReference flightRef = FirebaseDatabase.getInstance()
+                .getReference("Flights")
+                .child(child)
+                .child("reservedSeats");
 
-                    // Update Firebase
-                    seatsRef.setValue(updatedSeats)
-                            .addOnSuccessListener(aVoid -> {
-                                Log.d("Firebase", "Successfully updated seats for " + flightKey);
-                                Toast.makeText(getApplicationContext(),
-                                        "Seats A1,A2 added to " + flightKey,
-                                        Toast.LENGTH_SHORT).show();
-                            })
-                            .addOnFailureListener(e -> {
-                                Log.e("Firebase", "Failed to update seats", e);
-                            });
-                }
+        flightRef.get().addOnSuccessListener(dataSnapshot -> {
+            String currentSeats = "";
+
+            if (dataSnapshot.exists()) {
+                currentSeats = dataSnapshot.getValue(String.class);
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Firebase", "Query failed", error.toException());
-                Toast.makeText(getApplicationContext(),
-                        "Error checking flights",
-                        Toast.LENGTH_SHORT).show();
+            // Convert the currentSeats string to a list
+            List<String> seatList = new ArrayList<>();
+            if (currentSeats != null && !currentSeats.isEmpty()) {
+                seatList = new ArrayList<>(Arrays.asList(currentSeats.split(",")));
             }
-        });
+
+            String selectedSeat = binding.seatTxt.getText().toString();
+
+            // Only add if seat not already reserved
+            if (!seatList.contains(selectedSeat)) {
+                seatList.add(selectedSeat);
+
+//                List<String> myList = new ArrayList<>(Arrays.asList(binding.seatTxt.getText().toString()));
+
+            }
+//            List<String> updatedSeats = new ArrayList<>(Arrays.asList(selectedSeat.split(",")));
+
+            // Convert list back to comma-separated string
+            String updatedSeats = String.join(",", seatList);
+
+
+            // Update Firebase with new seat list
+            flightRef.setValue(updatedSeats)
+                    .addOnSuccessListener(unused ->
+                            Toast.makeText(getApplicationContext(), "✅Seat Booked Successfully ", Toast.LENGTH_SHORT).show()
+                    )
+                    .addOnFailureListener(e ->
+                            Toast.makeText(getApplicationContext(), "❌ Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                    );
+
+        }).addOnFailureListener(e ->
+                Toast.makeText(getApplicationContext(), "🔥 Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+        );
     }
+
+
+
+
+
+
 
 
     private boolean checkPermission() {
@@ -224,8 +232,8 @@ private void getIntentExtra() {
             binding.SV.setVisibility(View.INVISIBLE);
             View contentView = binding.Ticket.getChildAt(0);
             contentView.measure(
-                    View.MeasureSpec.makeMeasureSpec(binding.Ticket .getWidth(), View.MeasureSpec.EXACTLY),
-                    View.MeasureSpec.makeMeasureSpec(binding.Ticket .getHeight(), View.MeasureSpec.EXACTLY)
+                    View.MeasureSpec.makeMeasureSpec(binding.Ticket.getWidth(), View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(binding.Ticket.getHeight(), View.MeasureSpec.EXACTLY)
             );
 
             int width = contentView.getMeasuredWidth();
