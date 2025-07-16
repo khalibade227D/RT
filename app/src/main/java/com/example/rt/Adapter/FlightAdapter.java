@@ -21,15 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ViewHolder> {
-    private List<Flight> flights;
+    private final ArrayList<Flight> flights;
     private Context context;
 
-    public FlightAdapter(List<Flight> flights) {
+    public FlightAdapter(ArrayList<Flight> flights) {
         this.flights = flights != null ? flights : new ArrayList<>(); // Ensure flights is never null
     }
 
-    public void updateList(List<Flight> newFlights) {
-        this.flights = newFlights != null ? newFlights : new ArrayList<>();
+public void updateList(ArrayList<Flight> newFlights) {
+        this.flights.clear();
+        if (newFlights != null) {
+            this.flights.addAll(newFlights);
+        }
         notifyDataSetChanged();
     }
 
@@ -59,6 +62,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ViewHolder
             Log.e("FlightAdapter", "Flight object is null at position: " + position);
             return;
         }
+
 
         // Load image only if URL is not null/empty
         if (flight.getTrainLogo() != null && !flight.getTrainLogo().isEmpty()) {

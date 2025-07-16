@@ -73,7 +73,7 @@ public class TicketDetailActivity extends BaseActivity2{
     private void TicketCode() {
         Random random = new Random();
         int num = random.nextInt(10000000)+99999999;
-       binding.Code.setText("Code: " + num);
+       binding.Code.setText("Code: "+ num);
     }
 
 

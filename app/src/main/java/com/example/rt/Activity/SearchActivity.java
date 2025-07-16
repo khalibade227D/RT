@@ -1,23 +1,15 @@
 package com.example.rt.Activity;
 
-import static android.content.Intent.getIntent;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.rt.Adapter.FlightAdapter;
 import com.example.rt.Model.Flight;
-import com.example.rt.R;
 import com.example.rt.databinding.ActivitySearchBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,14 +19,14 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SearchActivity extends BaseActivity2 {
     private ActivitySearchBinding binding;
     private String from, to, date;
     private FlightAdapter adapter;
-    private FirebaseDatabase database;
-    private DatabaseReference flightsRef;
+    private final List<Flight> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +34,8 @@ public class SearchActivity extends BaseActivity2 {
         binding = ActivitySearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        database = FirebaseDatabase.getInstance();
-        flightsRef = database.getReference("Flights");
-
         // Initialize RecyclerView
-        adapter = new FlightAdapter(new ArrayList<>());
+        adapter = new FlightAdapter((ArrayList<Flight>) list);
         binding.SearchView.setLayoutManager(new LinearLayoutManager(this));
         binding.SearchView.setAdapter(adapter);
 
@@ -56,31 +45,42 @@ public class SearchActivity extends BaseActivity2 {
     }
 
     private void searchFlights() {
-
         binding.progressBarSearch.setVisibility(View.VISIBLE);
+        DatabaseReference myRef = database.getReference("Flights");
 
-        // Query flights where "from" matches (case-sensitive)
-        Query query = flightsRef.orderByChild("from").equalTo(from.toLowerCase());
+        Log.d("DEBUG", "From: " + from + ", To: " + to);
 
+        Query query = myRef.orderByChild("from").equalTo(from); // Don't use toLowerCase again, already done in getIntentExtra()
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Flight> filteredFlights = new ArrayList<>();
-
-                for (DataSnapshot flightSnapshot : snapshot.getChildren()) {
-                    Flight flight = flightSnapshot.getValue(Flight.class);
-                    if (flight != null && flight.getTo().equalsIgnoreCase(to)) {
-                        filteredFlights.add(flight);
+                list.clear();
+                try {
+                    if (snapshot.exists()) {
+                        for (DataSnapshot issue : snapshot.getChildren()) {
+                            try {
+                                Flight flight = issue.getValue(Flight.class);
+                                if (flight != null &&
+                                        flight.getTo() != null &&
+                                        flight.getTo().equalsIgnoreCase(to)) {
+                                    list.add(flight);
+                                    Log.d("DEBUG", "Flight added: " + flight.getFrom() + " -> " + flight.getTo());
+                                } else {
+                                    Log.d("DEBUG", "Flight skipped: " + (flight != null ? flight.getTo() : "null"));
+                                }
+                            } catch (Exception e) {
+                                Log.e("FlightParse", "Error parsing flight: " + issue.getKey(), e);
+                            }
+                        }
+                    } else {
+                        Log.d("DEBUG", "No matching flights found");
                     }
+                } catch (Exception e) {
+                    Log.e("SearchError", "Data loading failed", e);
+                } finally {
+                    binding.progressBarSearch.setVisibility(View.GONE);
+                    adapter.notifyDataSetChanged();
                 }
-
-                if (filteredFlights.isEmpty()) {
-                    Toast.makeText(SearchActivity.this, "No Ticket found", Toast.LENGTH_SHORT).show();
-                } else {
-                    adapter.updateList(filteredFlights); // Update adapter
-                }
-
-                binding.progressBarSearch.setVisibility(View.GONE);
             }
 
             @Override
@@ -91,17 +91,22 @@ public class SearchActivity extends BaseActivity2 {
         });
     }
 
+
     private void setVariable() {
-        binding.backBtn.setOnClickListener(v -> {
-            finish();
-        });
+        binding.backBtn.setOnClickListener(v -> finish());
     }
 
     private void getIntentExtra() {
-        from = getIntent().getStringExtra("from").toLowerCase(); // Force lowercase
-        to = getIntent().getStringExtra("to").toLowerCase();
-        date = getIntent().getStringExtra("date");
+        if (getIntent() != null) {
+            from = getIntent().getStringExtra("from");
+            to = getIntent().getStringExtra("to");
+            date = getIntent().getStringExtra("date");
 
-        Log.d("SearchActivity", "Searching flights from: " + from + " to: " + to);
+            if (from != null) from = from.toLowerCase();
+            if (to != null) to = to.toLowerCase();
+            if (date != null) date = date.toLowerCase();
+
+            Log.d("SearchActivity", "Searching flights from: " + from + " to: " + to + " on: " + date);
+        }
     }
 }
