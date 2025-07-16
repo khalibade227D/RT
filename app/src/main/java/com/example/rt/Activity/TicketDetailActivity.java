@@ -1,6 +1,7 @@
 package com.example.rt.Activity;
 
 import static android.content.Intent.getIntent;
+import static android.text.TextUtils.split;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -109,7 +110,7 @@ private void getIntentExtra() {
         binding.downloadTicketBtn.setOnClickListener(v -> {
 
             if (checkPermission()) {
-//                checktrain();
+                checkTrain();
                 createPdfFromView();
                 Intent intent = new Intent(this,LoginActivity.class);
                 startActivity(intent);
@@ -121,60 +122,81 @@ private void getIntentExtra() {
 
     }
 
-    private void checktrain() {
-        Query deltaFlightsQuery = FirebaseDatabase.getInstance()
-                .getReference("flights")
-                .orderByChild(binding.train.toString())
-                .equalTo("Delta");
+    private void checkTrain() {
+        String trainName = "";
 
-        deltaFlightsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+        if(binding.train.getText().toString().equals("Delta"))
+            trainName = "flight1";
+        else if (binding.train.getText().toString().equals("American")) {
+            trainName = "flight2";
+        } else if (binding.train.getText().toString().equals("Southwest")) {
+            trainName = "flight4";
+        } else if (binding.train.getText().toString().equals("United")) {
+            trainName = "flight5";
+        }else{
+            trainName = "flight3";
+        }
+
+        // Get reference to flight1 specifically
+        DatabaseReference flight1Ref = FirebaseDatabase.getInstance()
+                .getReference("Flights")
+                .child(trainName);
+
+        flight1Ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot flightSnapshot : snapshot.getChildren()) {
-                    // Get the flight key (e.g., "flight1")
-                    String flightKey = flightSnapshot.getKey();
-                    // Get reference to this flight's reservedSeats
-                    DatabaseReference seatsRef = flightSnapshot.child("reservedSeats").getRef();
-                    // Get current seats (or empty string if null)
-                    String currentSeats = flightSnapshot.child("reservedSeats").getValue(String.class);
-                    if (currentSeats == null) {
-                        currentSeats = "";
-                    }
-                    // Prepare new seats (avoid duplicates)
-                    String newSeats = binding.seatTxt.toString();
-                    String updatedSeats;
-
-                    if (currentSeats.isEmpty()) {
-                        updatedSeats = newSeats;
-                    } else {
-                        // Check if seats already exist
-                        if (!currentSeats.contains( binding.seatTxt.toString())){
-                            updatedSeats = currentSeats + "," + newSeats;
-                        } else {
-                            Log.d("Firebase", "Seats A1 or A2 already reserved");
-                            continue; // Skip to next flight
-                        }
-                    }
-
-                    // Update Firebase
-                    seatsRef.setValue(updatedSeats)
-                            .addOnSuccessListener(aVoid -> {
-                                Log.d("Firebase", "Successfully updated seats for " + flightKey);
-                                Toast.makeText(getApplicationContext(),
-                                        "Seats A1,A2 added to " + flightKey,
-                                        Toast.LENGTH_SHORT).show();
-                            })
-                            .addOnFailureListener(e -> {
-                                Log.e("Firebase", "Failed to update seats", e);
-                            });
+                if (!snapshot.exists()) {
+                    Toast.makeText(getApplicationContext(),
+                            "Flight1 not found",
+                            Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+                // Get current reserved seats
+                String currentSeats = snapshot.child("reservedSeats").getValue(String.class);
+                if (currentSeats == null) {
+                    currentSeats = "";
+                }
+                // Get seat input (e.g., "A1,B1,C1,D1")
+                String seatInput = binding.seatTxt.getText().toString();
+
+            // Split into individual seats
+                String[] seatsToAdd = seatInput.split(",");
+
+            // Now seatsToAdd contains: {"A1", "B1", "C1", "D1"}
+                String updatedSeats = currentSeats;
+
+                // Check and add each seat
+                for (String seat : seatsToAdd) {
+                    if (currentSeats.contains(seat)) {
+                        Log.d("Firebase", "Seat " + seat + " already reserved");
+                        continue;
+                    }
+
+                    updatedSeats = updatedSeats.isEmpty() ? seat : updatedSeats + "," + seat;
+                }
+
+                // Update Firebase
+                snapshot.child("reservedSeats").getRef().setValue(updatedSeats)
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d("Firebase", "Successfully updated seats for flight1");
+                            Toast.makeText(getApplicationContext(),
+                                    "Seats added Successfully",
+                                    Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("Firebase", "Failed to update seats", e);
+                            Toast.makeText(getApplicationContext(),
+                                    "Failed to update seats",
+                                    Toast.LENGTH_SHORT).show();
+                        });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Firebase", "Query failed", error.toException());
+                Log.e("Firebase", "Database error", error.toException());
                 Toast.makeText(getApplicationContext(),
-                        "Error checking flights",
+                        "Database error: " + error.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
         });
